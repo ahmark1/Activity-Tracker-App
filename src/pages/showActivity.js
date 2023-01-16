@@ -1,11 +1,33 @@
 import Table from 'react-bootstrap/Table';
+import { useEffect, useState } from 'react';
 
 function Show(){
+
+  const [activities, setActivites] = useState([]);
+
+  useEffect(() => {
+    async function getActivities() {
+      const response = await fetch(`http://localhost:8000/activities/`);
+  
+      if (!response.ok) {
+        const message = `An error occurred: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+  
+      const records = await response.json();
+      setActivites(records);
+    }
+  
+    getActivities();
+  
+    return;
+  }, [activities.length]);
+
     return(
         <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
             <th>Activity Name</th>
             <th>Descripiton</th>
             <th>Type</th>
@@ -14,23 +36,7 @@ function Show(){
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td colSpan={2}>Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          <tr></tr>
         </tbody>
       </Table>
     )

@@ -3,11 +3,14 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import FormLabel from 'react-bootstrap/esm/FormLabel';
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import Show from './showActivity';
 import { useReducer, useState } from 'react';
 
 function Activity() {
+
+  const navigate = useNavigate();
+
 
         const [activity,setActivity] = useState({name: "", description: "", type: "", duration: "", date: ""});
 
@@ -21,12 +24,34 @@ function Activity() {
         setActivity({ ...activity, type: e });
     }
 
+    const PostData = async (e) => {
+          e.preventDefault();
+          const {name, description, type, duration, date} = activity;
+
+          const res = await fetch("http://localhost:8000/activities/add", {
+            method: "POST",
+            headers: {
+              "Content-Type" : "application/json" 
+            },
+            body:
+            JSON.stringify({
+              name, description, type, duration, date
+            })
+
+          } )
+            window.alert('Data Added!');
+            navigate("/show");
+    }
+    
+
 
 
   return (
 
     <div className='container'>
-      
+      <br/>
+      <h3>Add Activity</h3>
+      <br/>
       
       <InputGroup className="mb-3">
         <InputGroup.Text id="inputGroup-sizing-default">
@@ -93,7 +118,7 @@ function Activity() {
       </InputGroup>
 
       <InputGroup className="mb-3">
-      <Button>Add Activity</Button>
+      <Button onClick={PostData}>Add Activity</Button>
       </InputGroup>
 
       <InputGroup className="mb-3">
